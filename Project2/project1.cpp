@@ -28,7 +28,7 @@ PlayerStats players[50];
 class Game{
     bool game_state;
     char game_array[9]={'\0','\0','\0','\0','\0','\0','\0','\0','\0'};
-    int nop=0, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1; // nop means number of plays
+    int nop=0, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1, difficulty_number; // nop means number of plays
     char human='O', computer='X', inputed_character='\0';
     unsigned long stats, victories=0, defeats=0, ties=0, computer_victories=0, human_victories=0, computer_defeats=0, human_defeats=0, computer_ties=0, human_ties=0;
     string exit_confirmation, difficulty="Elementary",User;
@@ -66,7 +66,7 @@ class Game{
         void checkAndComputeStats();
         void showMultipleTables(char [][9], int);
         void writeGameArrayToFile(const char*);
-        void readAndPrintGameArrays(const string& );
+        void readAndPrintGameArrays(const string &, const string &, const string & );
         void removeUserFromFile(const string& , const string&, const string& );
         void saveArrays(string);
         void showArrays();
@@ -144,7 +144,6 @@ int Game::showTopPlayers(string text3_param, string diff3){
     return 0;
 }
 
-
 void Game::showStats(){
     cout <<right << "Difficulty: " <<difficulty<<endl;
     cout <<right << "Human_Victories: " <<human_victories<<endl;
@@ -154,8 +153,6 @@ void Game::showStats(){
     cout <<right << "Computer_Defeats: " <<computer_defeats<<endl;
     cout <<right << "Computer_Ties: " <<computer_ties<<endl;
 }
-
-
 
 int Game::loadStats(string text2_param, string user2, string diff2){  
     fstream retrieveFile(text2_param);
@@ -333,7 +330,6 @@ int Game::readAndWriteStats(string text_param, string user, string diff) {
     return 0;
 }
 
-
 int Game::retrievePreviousGame(string user) {
     cout << "Retrieving..." << endl;
     ifstream retriever("previous_game.txt");
@@ -385,6 +381,7 @@ int Game::retrievePreviousGame(string user) {
                     // Skip writing this line to the temporary file
                     removeUserFromFile("arrays.txt", User, difficulty);
                     clearArray();
+                    nop=0;
                     continue;
                 } else {
                     cout << "Please input a valid option" << endl;
@@ -409,7 +406,6 @@ int Game::retrievePreviousGame(string user) {
         return 0;
     }
 }
-
 
 void Game::execute_option_one(){
     if(User==""){
@@ -467,15 +463,43 @@ void Game::resetStats(){
 
 void Game::execute_option_three(){
     //You have to input a code here to clear the current game and start a new game.
-    cout << "Select difficulty "<<endl;
-    cout <<left << setw(20) << setfill(' ')<<"Elementary" <<endl;
-    cout <<left << setw(20) << setfill(' ')<<"Basic" <<endl;
-    cout <<left << setw(20) << setfill(' ')<<"Medium" <<endl;
-    cin >> difficulty; 
+    cout << "Select difficulty. "<< "Please enter a number. " << endl;
+    cout <<left << setw(20) << setfill(' ')<<"1. Elementary" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"2. Basic" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"3. Medium" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"4. Advanced" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"5. HumanVsHuman" <<endl;
+    cout <<left << setw(20) << setfill(' ')<<"6. ComputerVsComputer" <<endl;
+    cin >> difficulty_number;
+    switch(difficulty_number){
+        case 1:
+            difficulty="Elementary";
+            break;
+        case 2:
+            difficulty="Basic";
+            break;
+        case 3:
+            difficulty="Medium";
+            break;
+        case 4:
+            difficulty="Advanced";
+            break;
+        case 5:
+            difficulty="HumanVsHuman";
+            break;
+        case 6:
+            difficulty="ComputerVsComputer";
+            break;
+        default:
+            difficulty==""?difficulty="Elementary":difficulty;
+            cout <<"Enter a valid number if Elementary was selected by default" <<endl;
+            break;
+    }
     cout << difficulty << " " << "selected" <<endl;
     resetStats();
     gameMenu();
 }
+
 
 void Game::execute_option_four(){
     saveGame();
@@ -499,7 +523,6 @@ void Game::execute_option_five(PlayerStats player[], int numPlayers){
     }
     gameMenu();
 }
-
 
 void Game::gameMenu(){ // Lists the options available to the user;
     cout << "Tic Tac Toe." << endl;
@@ -588,7 +611,6 @@ void Game::playGreedy(){
     }
     
 }
-
 
 void Game::playMediumWinner(){
     for (int i = 0; i<=8; i++) {
@@ -748,7 +770,7 @@ char Game::checkTable(){
 void Game::showTable(){
     cout << right <<"No of plays: "<< nop << "  "<< "Difficulty :" << difficulty <<endl;
     writeGameArrayToFile("arrays.txt");
-    readAndPrintGameArrays("arrays.txt");
+    readAndPrintGameArrays("arrays.txt", User, difficulty);
     cout << "|" << game_array[0] << "|" <<game_array[1] << "|" <<game_array[2]<<endl;
     cout << "-----"<<endl;
     cout << "|" << game_array[3] << "|" <<game_array[4] << "|" <<game_array[5]<<endl;
@@ -849,150 +871,6 @@ int Game::saveGame(){
     }   
 }
 
-// void Game::saveArrays(string file_name){
-//      fstream myfile;
-//     myfile.open(file_name, ios::in | ios::out);
-//     string current_line="";
-//     bool userExists=false;
-//     if(!myfile.is_open()){
-//         cout << "Error opening backup file" <<endl;
-//         return -1;
-//     }else{
-//         while (getline(myfile, current_line)) {
-//             string line_object = "", line_object_2 = "";
-//             // Check if the line contains "User:"
-//             size_t user_pos = current_line.find("User: ");
-//             size_t human_pos = current_line.find("human: ");
-
-//             if (user_pos != string::npos && human_pos != string::npos) {
-//                 // Extract user, difficulty, and victories substrings
-//                 line_object = current_line.substr(user_pos + 6, human_pos - user_pos - 7);
-//                 if ((line_object == User)) {
-//                     cout<<line_object<<endl;
-//                     cout<<line_object_2<<endl;
-//                     cout<<"Saving your game"<<endl;
-//                     size_t line_length = current_line.length()+2; // Adding 1 for the newline character
-//                     myfile.seekp(myfile.tellg() - static_cast<streamoff>(line_length));
-//                     myfile <<"User: " << User<< " " << "human:  " << human<< " " 
-//                         <<  "computer:  "<<computer << " " << "nop: "<< nop << " " 
-//                         <<  "location_on_game_array: "<<location_on_game_array<< " " 
-//                         << "array_size: "<<array_size<< " " << "difficulty: "<<difficulty << " ";
-//                     myfile << "arrays: ";
-//                     for (int i = 0; i < 9; ++i) {
-//                         myfile << game_array[i];
-//                     }
-//                     userExists = true; // Set the flag to true
-//                     break; // Exit the loop since the user was found and updated
-//                 }
-//             }
-//         }
-
-//         if (!userExists) {
-//             myfile.close();
-//             myfile.open("previous_game.txt", ios::out | ios::app); // Reopen in append mode
-//             if (!myfile.is_open()) {
-//                 cout << "Error opening file for appending" << endl;
-//                 return -1;
-//             }
-//             cout<<"Resaving"<<endl;
-           
-//             myfile <<"User: " << User<< " " << "human:  " << human<< " " 
-//                 <<  "computer:  "<<computer << " " << "nop: "<< nop << " " 
-//                 <<  "location_on_game_array: "<<location_on_game_array<< " " 
-//                 << "array_size: "<<array_size<< " " << "difficulty: "<<difficulty << " ";
-//                 myfile << "arrays: ";
-//                 for (int i = 0; i < 9; ++i) {
-//                     myfile << game_array[i];
-//                 }
-//                 myfile<<endl;
-            
-//         }
-
-//         myfile.close(); // Close the file
-//         cout << "Operation completed" << endl;
-//         return 0;
-//     }   
-// }
-
-// void Game::showArrays(){
-//     fstream myfile;
-//     myfile.open("arrays.txt", ios::in | ios::out);
-//     string current_line="";
-//     bool userExists=false;
-//     if(!myfile.is_open()){
-//         cout << "Error opening backup file" <<endl;
-//         return -1;
-//     }else{
-//         while (getline(myfile, current_line)) {
-//             string line_object = "", line_object_2 = "";
-//             // Check if the line contains "User:"
-//             size_t user_pos = current_line.find("User: ");
-//             size_t human_pos = current_line.find("human: ");
-
-//             if (user_pos != string::npos && human_pos != string::npos) {
-//                 // Extract user, difficulty, and victories substrings
-//                 line_object = current_line.substr(user_pos + 6, human_pos - user_pos - 7);
-//                 if ((line_object == User)) {
-//                     cout<<line_object<<endl;
-//                     cout<<line_object_2<<endl;
-//                     cout<<"Saving your game"<<endl;
-//                     size_t line_length = current_line.length()+2; // Adding 1 for the newline character
-//                     myfile.seekp(myfile.tellg() - static_cast<streamoff>(line_length));
-//                     myfile <<"User: " << User<< " " << "human:  " << human<< " " 
-//                         <<  "computer:  "<<computer << " " << "nop: "<< nop << " " 
-//                         <<  "location_on_game_array: "<<location_on_game_array<< " " 
-//                         << "array_size: "<<array_size<< " " << "difficulty: "<<difficulty << " ";
-//                     myfile << "arrays: ";
-//                     for (int i = 0; i < 9; ++i) {
-//                         myfile << game_array[i];
-//                     }
-//                     userExists = true; // Set the flag to true
-//                     break; // Exit the loop since the user was found and updated
-//                 }
-//             }
-//         }
-
-//         if (!userExists) {
-//             myfile.close();
-//             myfile.open("previous_game.txt", ios::out | ios::app); // Reopen in append mode
-//             if (!myfile.is_open()) {
-//                 cout << "Error opening file for appending" << endl;
-//                 return -1;
-//             }
-//             cout<<"Resaving"<<endl;
-           
-//             myfile <<"User: " << User<< " " << "human:  " << human<< " " 
-//                 <<  "computer:  "<<computer << " " << "nop: "<< nop << " " 
-//                 <<  "location_on_game_array: "<<location_on_game_array<< " " 
-//                 << "array_size: "<<array_size<< " " << "difficulty: "<<difficulty << " ";
-//                 myfile << "arrays: ";
-//                 for (int i = 0; i < 9; ++i) {
-//                     myfile << game_array[i];
-//                 }
-//                 myfile<<endl;
-            
-//         }
-
-//         myfile.close(); // Close the file
-//         cout << "Operation completed" << endl;
-//         return 0;
-//     }   
-// }
-
-// void Game::writeGameArrayToFile(const char* filename, const char* user, const char* difficulty) {
-//     ofstream outfile(filename, ios::app);
-//     if (outfile.is_open()) {
-//         outfile << "User: " << user << " Difficulty: " << difficulty << endl;
-//         for (int i = 0; i < 9; ++i) {
-//             outfile << game_array[i];
-//         }
-//         outfile << endl;
-//         outfile.close();
-//     } else {
-//         cout << "Unable to open file: " << filename << endl;
-//     }
-// }
-
 void Game::writeGameArrayToFile(const char* filename) {
     ifstream infile(filename);
     ofstream outfile("temp.txt"); // Temporary file to store modified content
@@ -1053,8 +931,56 @@ void Game::writeGameArrayToFile(const char* filename) {
     cout << "Game array successfully written to file: " << filename << endl;
 }
 
+// void Game::readAndPrintGameArrays(const string& filename) {
+//     ifstream infile(filename);
+//     if (!infile.is_open()) {
+//         cout << "Error opening file for reading." << endl;
+//         return;
+//     }
 
-void Game::readAndPrintGameArrays(const string& filename) {
+//     string line;
+//     string user, difficulty;
+//     bool readingGameArrays = false;
+//     vector<string> gameArrays;
+
+//     while (getline(infile, line)) {
+//         if (line.find("User: ") != string::npos && line.find("Difficulty: ") != string::npos) {
+//             // Extract user and difficulty from the line
+//             size_t user_pos = line.find("User: ");
+//             size_t difficulty_pos = line.find("Difficulty: ");
+//             user = line.substr(user_pos + 6, difficulty_pos - user_pos - 6);
+//             difficulty = line.substr(difficulty_pos + 13);
+//             cout << "User: " << user << " Difficulty: " << difficulty << endl;
+//             readingGameArrays = true;
+//         } else if (readingGameArrays && line.find("Game Array") != string::npos) {
+//             // Extract and store the game array
+//             size_t array_pos = line.find(":") + 2; // Move past the colon and space
+//             string gameArrayStr = line.substr(array_pos);
+//             gameArrays.push_back(gameArrayStr);
+//         }
+//     }
+
+//     // Print the game arrays side by side
+//     int numArrays = gameArrays.size();
+//     int numRows = 3; // Assuming Tic Tac Toe board is 3x3
+//     for (int i = 0; i < numRows; ++i) {
+//         for (int j = 0; j < numArrays; ++j) {
+//             string currentArray = gameArrays[j];
+//             // Print each cell of the current array
+//             for (int k = 0; k < 3; ++k) {
+//                 cout << "| " << currentArray[i * 3 + k] << " ";
+//             }
+//             cout << "..... ";
+
+//         }
+//         cout << endl;
+//     }
+
+//     infile.close();
+// }
+
+
+void Game::readAndPrintGameArrays(const string& filename, const string& user, const string& difficulty) {
     ifstream infile(filename);
     if (!infile.is_open()) {
         cout << "Error opening file for reading." << endl;
@@ -1062,26 +988,34 @@ void Game::readAndPrintGameArrays(const string& filename) {
     }
 
     string line;
-    string user, difficulty;
-    bool readingGameArrays = false;
+    string current_user, current_difficulty;
+    bool foundUser = false;
     vector<string> gameArrays;
 
     while (getline(infile, line)) {
-        if (line.find("User: ") != string::npos && line.find("Difficulty: ") != string::npos) {
+        size_t user_pos = line.find("User: ");
+        size_t difficulty_pos = line.find("Difficulty: ");
+        if (user_pos!= string::npos && difficulty_pos != string::npos) {
             // Extract user and difficulty from the line
-            size_t user_pos = line.find("User: ");
-            size_t difficulty_pos = line.find("Difficulty: ");
-            user = line.substr(user_pos + 6, difficulty_pos - user_pos - 6);
-            difficulty = line.substr(difficulty_pos + 12);
-            cout << "User: " << user << " Difficulty: " << difficulty << endl;
-            readingGameArrays = true;
-        } else if (readingGameArrays && line.find("Game Array") != string::npos) {
+            current_user = line.substr(user_pos + 6, difficulty_pos - user_pos - 7);
+            current_difficulty = line.substr(difficulty_pos + 12);
+            
+            // Check if this is the user and difficulty we want
+            if (current_user == user && current_difficulty == difficulty) {
+                cout << "User: " << current_user << " Difficulty: " << current_difficulty << endl;
+                foundUser = true;
+            } else {
+                foundUser = false;
+            }
+        } else if (foundUser && line.find("Game Array") != string::npos) {
             // Extract and store the game array
             size_t array_pos = line.find(":") + 2; // Move past the colon and space
             string gameArrayStr = line.substr(array_pos);
             gameArrays.push_back(gameArrayStr);
         }
     }
+
+    infile.close();
 
     // Print the game arrays side by side
     int numArrays = gameArrays.size();
@@ -1094,12 +1028,9 @@ void Game::readAndPrintGameArrays(const string& filename) {
                 cout << "| " << currentArray[i * 3 + k] << " ";
             }
             cout << "..... ";
-
         }
         cout << endl;
     }
-
-    infile.close();
 }
 
 
@@ -1166,7 +1097,6 @@ void Game::removeUserFromFile(const string& filename, const string& user, const 
         cout << "User " << user << " with difficulty " << difficulty << " not found in file." << endl;
     }
 }
-
 
 
 int main(){

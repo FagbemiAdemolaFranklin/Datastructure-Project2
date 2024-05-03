@@ -38,3 +38,7 @@ User: computer&Williams Difficulty: Elementary Victories: 0 Defeats: 1 Ties: 0
 User: Williams Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0 
 User: computer&John Difficulty: Elementary Victories: 0 Defeats: 1 Ties: 0 
 User: John Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0 
+User: computer&Adebola Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
+User: Adebola Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
+User: computer&Ewa Difficulty: Elementary Victories: 0 Defeats: 1 Ties: 0 
+User: Ewa Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0 
