@@ -383,6 +383,8 @@ int Game::retrievePreviousGame(string user) {
                     userFound = true;
                 } else if (retrieve_decision == 'N') {
                     // Skip writing this line to the temporary file
+                    removeUserFromFile("arrays.txt", User, difficulty);
+                    clearArray();
                     continue;
                 } else {
                     cout << "Please input a valid option" << endl;

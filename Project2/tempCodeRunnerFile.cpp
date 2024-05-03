@@ -1,1 +1,1 @@
-playMedium
+resetS
