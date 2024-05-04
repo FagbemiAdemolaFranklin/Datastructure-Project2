@@ -50,3 +50,17 @@ User: Folake Difficulty: HumanVsHuman Victories: 3 Defeats: 1 Ties: 0
 User: Florence Difficulty: HumanVsHuman Victories: 1 Defeats: 3 Ties: 0 
 User: Macron Difficulty: HumanVsHuman Victories: 1 Defeats: 0 Ties: 0 
 User: Narendra Difficulty: HumanVsHuman Victories: 0 Defeats: 1 Ties: 0 
+User: computer&Brazao Difficulty: Basic Victories: 1 Defeats: 0 Ties: 0 
+User: Brazao Difficulty: Basic Victories: 0 Defeats: 1 Ties: 0 
+User: computer&Tofunmi Difficulty: Medium Victories: 1 Defeats: 1 Ties: 0 
+User: Tofunmi Difficulty: Medium Victories: 1 Defeats: 1 Ties: 0 
+User: Uri Difficulty: HumanVsHuman Victories: 1 Defeats: 0 Ties: 0 
+User: Zino Difficulty: HumanVsHuman Victories: 0 Defeats: 1 Ties: 0 
+User: computer&Adele Difficulty: Basic Victories: 1 Defeats: 1 Ties: 0 
+User: Adele Difficulty: Basic Victories: 1 Defeats: 1 Ties: 0 
+User: Zainab Difficulty: HumanVsHuman Victories: 1 Defeats: 0 Ties: 0 
+User: Francis Difficulty: HumanVsHuman Victories: 0 Defeats: 1 Ties: 0 
+User: computer&Zainab Difficulty: Medium Victories: 1 Defeats: 0 Ties: 0 
+User: Zainab Difficulty: Medium Victories: 0 Defeats: 1 Ties: 0 
+User: computer&Grace Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
+User: Grace Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
