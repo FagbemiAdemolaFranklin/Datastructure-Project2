@@ -213,14 +213,14 @@ int Game::loadStats(string text2_param, string user2, string diff2){
             line_object_2 = current_line.substr(diff_pos + 12, vict_pos-diff_pos-13);
             if ((line_object==user2) && (line_object_2==difficulty)) {
                 cout << "Retrieving statistics" << endl;
-                cout<<line_object<<endl;
-                cout<<line_object_2<<endl;
+                // cout<<line_object<<endl;
+                // cout<<line_object_2<<endl;
                 // Process the statistics
                 // Here, you can add the logic to update the statistics variables
                 // For example:
                 int symbol_find;
                 if (user2 == "computer&"+User) {
-                    cout<<"here"<<endl;
+                    // cout<<"here"<<endl;
                     symbol_find = current_line.find("Victories: ");
                     computer_victories = stoi(current_line.substr(symbol_find + 11));
                     symbol_find = current_line.find("Defeats: ");
@@ -344,11 +344,11 @@ int Game::readAndWriteStats(string text_param, string user, string diff) {
 
                 // Check if the current line corresponds to the specified user and difficulty
                 if ((line_object == user) && (line_object_2 == diff)) {
-                    cout<<line_object<<endl;
-                    cout<<line_object_2<<endl;
+                    // cout<<line_object<<endl;
+                    // cout<<line_object_2<<endl;
                     // Update the line with new victories, defeats, and ties
                     if(user == "computer&"+User){
-                        cout<<"True"<<endl;
+                        // cout<<"True"<<endl;
                         int new_victories = stoi(current_line.substr(vict_pos + 11)) + computer_victories;
                         int new_defeats = stoi(current_line.substr(current_line.find("Defeats: ") + 9)) + computer_defeats;
                         int new_ties = stoi(current_line.substr(current_line.find("Ties: ") + 6)) + computer_ties;
@@ -366,15 +366,15 @@ int Game::readAndWriteStats(string text_param, string user, string diff) {
                         userExists = true; // Set the flag to true
                         break; // Exit the loop since the user was found and updated
                     }else if (user == User){
-                        cout<<"False"<<endl;
+                        // cout<<"False"<<endl;
                         int new_victories = stoi(current_line.substr(vict_pos + 11)) + human_victories;
                         int new_defeats = stoi(current_line.substr(current_line.find("Defeats: ") + 9)) + human_defeats;
                         int new_ties = stoi(current_line.substr(current_line.find("Ties: ") + 6)) + human_ties;
                         size_t line_length = current_line.length()+2; // Adding 1 for the newline character
                         //+ 3//
                         // Seek to the position of the line to be modified
-                        cout<< line_object.compare("Frank")<<endl;
-                        cout<< "here"<<endl;
+                        // cout<< line_object.compare("Frank")<<endl;
+                        // cout<< "here"<<endl;
                         stats_file_read_and_write.seekp(stats_file_read_and_write.tellg() - static_cast<streamoff>(line_length));
 
                         // Write the updated line
@@ -445,11 +445,11 @@ int Game::readAndWriteStats2(string text_param, string user, string diff) {
 
                 // Check if the current line corresponds to the specified user and difficulty
                 if ((line_object == user) && (line_object_2 == diff)) {
-                    cout<<line_object<<endl;
-                    cout<<line_object_2<<endl;
+                    // cout<<line_object<<endl;
+                    // cout<<line_object_2<<endl;
                     // Update the line with new victories, defeats, and ties
                     if(user == Human2){
-                        cout<<"True"<<endl;
+                        // cout<<"True"<<endl;
                         int new_victories = stoi(current_line.substr(vict_pos + 11)) + human_victories_2;
                         int new_defeats = stoi(current_line.substr(current_line.find("Defeats: ") + 9)) + human_defeats_2;
                         int new_ties = stoi(current_line.substr(current_line.find("Ties: ") + 6)) + human_ties_2;
@@ -467,7 +467,7 @@ int Game::readAndWriteStats2(string text_param, string user, string diff) {
                         userExists = true; // Set the flag to true
                         break; // Exit the loop since the user was found and updated
                     }else if (user == Human1){
-                        cout<<"False"<<endl;
+                        // cout<<"False"<<endl;
                         int new_victories = stoi(current_line.substr(vict_pos + 11)) + human_victories;
                         int new_defeats = stoi(current_line.substr(current_line.find("Defeats: ") + 9)) + human_defeats;
                         int new_ties = stoi(current_line.substr(current_line.find("Ties: ") + 6)) + human_ties;
@@ -559,7 +559,7 @@ int Game::retrievePreviousGame(string user) {
                     symbol_find = current_line.find("difficulty: ");
                     difficulty = current_line.substr(symbol_find + 12, arrays_pos - symbol_find - 13);
                     symbol_find = current_line.find("arrays: ");
-                    cout<<current_line.substr(symbol_find)<<endl;
+                    // cout<<current_line.substr(symbol_find)<<endl;
                     for (int i = 0; i < 9; i++) {
                         game_array[i] = current_line.substr(symbol_find+8)[i];
                         cout<<game_array[i]<<endl;
@@ -703,21 +703,39 @@ void Game::setComputer2(){
     resetStats();
 }
 
-void Game::execute_option_two(){
-    cout << "Choose who starts the game" <<endl;
-    cout << "1 - You ";
-    cout << " 2 - Computer"<<endl;
-    cin >> this->starter;
-    if(this->starter == 2){
-        // showTable();
-        difficulty==""?difficulty="Elementary":difficulty;
-        cout<< "Your symbol is O"<<endl;
-        gameMenu();
-    }else if(starter == 1){
-        difficulty==""?difficulty="Elementary":difficulty;
-        // playGame(); 
-        gameMenu();
+void Game::execute_option_two(){ 
+    if((difficulty!="HumanVsHuman")||(difficulty!="ComputerVsComputer")){
+        cout << "Choose who starts the game" <<endl;
+        cout << "1 - You ";
+        cout << " 2 - Computer"<<endl;
+        cin >> this->starter;
+        if(this->starter == 2){
+            // showTable();
+            difficulty==""?difficulty="Elementary":difficulty;
+            cout<< "Your symbol is O"<<endl;
+            gameMenu();
+        }else if(starter == 1){
+            difficulty==""?difficulty="Elementary":difficulty;
+            // playGame(); 
+            gameMenu();
+        }
+    }else{
+        cout <<"Starter would be selected randomly"<<endl;
     }
+    // cout << "Choose who starts the game" <<endl;
+    // cout << "1 - You ";
+    // cout << " 2 - Computer"<<endl;
+    // cin >> this->starter;
+    // if(this->starter == 2){
+    //     // showTable();
+    //     difficulty==""?difficulty="Elementary":difficulty;
+    //     cout<< "Your symbol is O"<<endl;
+    //     gameMenu();
+    // }else if(starter == 1){
+    //     difficulty==""?difficulty="Elementary":difficulty;
+    //     // playGame(); 
+    //     gameMenu();
+    // }
 }
 
 void Game::clearArray(){
@@ -793,8 +811,15 @@ void Game::execute_option_four(){
 }
 
 bool compareVictories(const PlayerStats& player1, const PlayerStats& player2) {
-    cout<< player1.victories << player2.victories <<endl;
-    return player1.victories > player2.victories;
+    // cout<< player1.victories << player2.victories <<endl;
+    // if((player1.victories)>(player2.victories)){
+    //     return true;
+    // }else if((player1.defeats)<(player2.defeats)){
+    //     return true;
+    // }else if((player1.ties)<(player2.ties)){
+    //     return true;
+    // }
+    return (player1.victories>player2.victories);
 }
 
 void Game::execute_option_five(PlayerStats player[], int numPlayers){
@@ -861,51 +886,40 @@ void Game::playElementaryWinner(){
 void Game::playGreedyWinner() {
     // Check if there is an empty cell to play
     if(difficulty=="ComputerVsComputer"){
-        for (int i = 0; i <= 8; i++) {
+       for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
-                // If an empty cell is found, play there
+                // If an empty cell is found, try placing the computer's symbol there
                 game_array[i] = current_computer;
-                // Check if this move leads to a win
-                if (checkTable() == current_computer) return;
+                // Check if this move results in a win for the computer
+                if (checkTable() == current_computer) return; // If so, the game is over
+                // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                break; // Exit loop after playing
             }
         }
         // If no win was achieved with the current move, play randomly
         game_array[checkRandomNumber()] = current_computer;
     }else{
+
         for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
-                // If an empty cell is found, play there
+                // If an empty cell is found, try placing the computer's symbol there
                 game_array[i] = computer;
-                // Check if this move leads to a win
-                if (checkTable() == computer) return;
+                // Check if this move results in a win for the computer
+                if (checkTable() == computer) return; // If so, the game is over
+                // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                break; // Exit loop after playing
             }
         }
         // If no win was achieved with the current move, play randomly
         game_array[checkRandomNumber()] = computer;
     }
-    // for (int i = 0; i <= 8; i++) {
-    //     if (game_array[i] == '\0') {
-    //         // If an empty cell is found, play there
-    //         game_array[i] = computer;
-    //         // Check if this move leads to a win
-    //         if (checkTable() == computer) return;
-    //         game_array[i] = '\0';
-    //         break; // Exit loop after playing
-    //     }
-    // }
-    // // If no win was achieved with the current move, play randomly
-    // game_array[checkRandomNumber()] = computer;
 }
 
 void Game::playGreedy(){
     showStats();
     cout << "0 - Pause or Exit to Menu"<<endl;
     showTable();
-    cout << "Your turn, input a number between 0-9" <<endl;
+    cout << "Your turn, input a number between 1-9" <<endl;
     cin >>location_on_game_array;
     cout << location_on_game_array<<endl;
     if(location_on_game_array==0){
@@ -931,7 +945,7 @@ void Game::playGreedy(){
 
 void Game::playMediumWinner(){
     if(difficulty=="ComputerVsComputer"){
-        for (int i = 0; i<=8; i++) {
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the computer's symbol there
                 game_array[i] = current_computer;
@@ -939,29 +953,27 @@ void Game::playMediumWinner(){
                 if (checkTable() == current_computer) return; // If so, the game is over
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                break;
             }
         }
 
-        // If the computer can't win in the next move, check if the human can win
-        for (int i = 0; i<=8; i++) {
+        // If the computer can't win in the next move, block the human's winning move if possible
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the human's symbol there
-                game_array[i] = computer2;
-                // Check if this move results in a win for the human
+                game_array[i] = computer2; // Assuming computer2 represents the opponent
+                // Check if this move results in a win for the opponent
                 if (checkTable() == computer2) {
-                    // If so, block the human's winning move and return
+                    // If so, block the opponent's winning move and return
                     game_array[i] = current_computer;
                     return;
                 }
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                game_array[checkRandomNumber()] = current_computer;
-                break;
             }
         }
+        game_array[checkRandomNumber()] =current_computer;
     }else{
-        for (int i = 0; i<=8; i++) {
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the computer's symbol there
                 game_array[i] = computer;
@@ -969,66 +981,44 @@ void Game::playMediumWinner(){
                 if (checkTable() == computer) return; // If so, the game is over
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                break;
             }
         }
 
-        // If the computer can't win in the next move, check if the human can win
-        for (int i = 0; i<=8; i++) {
+        // If the computer can't win in the next move, block the human's winning move if possible
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the human's symbol there
-                game_array[i] = human;
-                // Check if this move results in a win for the human
+                game_array[i] = human; // Assuming 'human' represents the opponent
+                // Check if this move results in a win for the opponent
                 if (checkTable() == human) {
-                    // If so, block the human's winning move and return
+                    // If so, block the opponent's winning move and return
                     game_array[i] = computer;
                     return;
                 }
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                game_array[checkRandomNumber()] = computer;
-                break;
             }
         }
+        game_array[checkRandomNumber()] = computer;
     }
-    // for (int i = 0; i<=8; i++) {
-    //     if (game_array[i] == '\0') {
-    //         // If an empty cell is found, try placing the computer's symbol there
-    //         game_array[i] = computer;
-    //         // Check if this move results in a win for the computer
-    //         if (checkTable() == computer) return; // If so, the game is over
-    //         // If not, undo the move and continue searching
-    //         game_array[i] = '\0';
-    //         break;
-    //     }
-    // }
-
-    // // If the computer can't win in the next move, check if the human can win
-    // for (int i = 0; i<=8; i++) {
-    //     if (game_array[i] == '\0') {
-    //         // If an empty cell is found, try placing the human's symbol there
-    //         game_array[i] = human;
-    //         // Check if this move results in a win for the human
-    //         if (checkTable() == human) {
-    //             // If so, block the human's winning move and return
-    //             game_array[i] = computer;
-    //             return;
-    //         }
-    //         // If not, undo the move and continue searching
-    //         game_array[i] = '\0';
-    //         game_array[checkRandomNumber()] = computer;
-    //         break;
-    //     }
-    // }
-
+    // If no winning move was detected, make a random move
     
-    // If no win was achieved with the current move, play randomly
-    // game_array[checkRandomNumber()] = computer;
 }
 
-void Game::playAdvancedWinner(){
-    if(difficulty=="ComputerVsComputer"){
-        for (int i = 0; i<=8; i++) {
+
+void Game::playAdvancedWinner() {
+    if (difficulty == "ComputerVsComputer") {
+        if (nop==0){
+            // If it's the first move, place the computer's symbol at the center
+            if(game_array[4]=='\0'){
+                game_array[4] = current_computer;
+                return;
+            }
+            
+        }
+
+        // First, check if the computer can win in the next move
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the computer's symbol there
                 game_array[i] = current_computer;
@@ -1036,29 +1026,37 @@ void Game::playAdvancedWinner(){
                 if (checkTable() == current_computer) return; // If so, the game is over
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                break;
             }
         }
 
-        // If the computer can't win in the next move, check if the human can win
-        for (int i = 0; i<=8; i++) {
+        // If the computer can't win in the next move, block the human's winning move if possible
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the human's symbol there
-                game_array[i] = computer2;
-                // Check if this move results in a win for the human
+                game_array[i] = computer2; // Assuming computer2 represents the opponent
+                // Check if this move results in a win for the opponent
                 if (checkTable() == computer2) {
-                    // If so, block the human's winning move and return
+                    // If so, block the opponent's winning move and return
                     game_array[i] = current_computer;
                     return;
                 }
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                game_array[checkRandomNumber()] = current_computer;
-                break;
             }
         }
-    }else{
-        for (int i = 0; i<=8; i++) {
+        game_array[checkRandomNumber()] = current_computer;
+
+    } else {
+        if (nop == 0) {
+            // If it's the first move, place the computer's symbol at the center
+            if(game_array[4]=='\0'){
+                game_array[4] = computer;
+                return;
+            }
+        }
+
+        // First, check if the computer can win in the next move
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the computer's symbol there
                 game_array[i] = computer;
@@ -1066,68 +1064,36 @@ void Game::playAdvancedWinner(){
                 if (checkTable() == computer) return; // If so, the game is over
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                break;
             }
         }
 
-        // If the computer can't win in the next move, check if the human can win
-        for (int i = 0; i<=8; i++) {
+        // If the computer can't win in the next move, block the human's winning move if possible
+        for (int i = 0; i <= 8; i++) {
             if (game_array[i] == '\0') {
                 // If an empty cell is found, try placing the human's symbol there
-                game_array[i] = human;
-                // Check if this move results in a win for the human
+                game_array[i] = human; // Assuming 'human' represents the opponent
+                // Check if this move results in a win for the opponent
                 if (checkTable() == human) {
-                    // If so, block the human's winning move and return
+                    // If so, block the opponent's winning move and return
                     game_array[i] = computer;
                     return;
                 }
                 // If not, undo the move and continue searching
                 game_array[i] = '\0';
-                game_array[checkRandomNumber()] = computer;
-                break;
             }
         }
+        game_array[checkRandomNumber()] = computer;
     }
 
-
-    // for (int i = 0; i<=8; i++) {
-    //     if (game_array[i] == '\0') {
-    //         // If an empty cell is found, try placing the computer's symbol there
-    //         game_array[i] = computer;
-    //         // Check if this move results in a win for the computer
-    //         if (checkTable() == computer) return; // If so, the game is over
-    //         // If not, undo the move and continue searching
-    //         game_array[i] = '\0';
-    //         break;
-    //     }
-    // }
-
-    // // If the computer can't win in the next move, check if the human can win
-    // for (int i = 0; i<=8; i++) {
-    //     if (game_array[i] == '\0') {
-    //         // If an empty cell is found, try placing the human's symbol there
-    //         game_array[i] = human;
-    //         // Check if this move results in a win for the human
-    //         if (checkTable() == human) {
-    //             // If so, block the human's winning move and return
-    //             game_array[i] = computer;
-    //             return;
-    //         }
-    //         // If not, undo the move and continue searching
-    //         game_array[i] = '\0';
-    //         game_array[checkRandomNumber()] = computer;
-    //         break;
-    //     }
-    // }
-    // If no win was achieved with the current move, play randomly
-    // game_array[checkRandomNumber()] = computer;
+    // If no winning move was detected, make a random move
+   
 }
 
 void  Game::playAdvanced(){
    showStats();
     cout << "0 - Pause or Exit to Menu"<<endl;
     showTable();
-    cout << "Your turn, input a number between 0-9" <<endl;
+    cout << "Your turn, input a number between 1-9" <<endl;
     cin >> location_on_game_array;
     if(location_on_game_array==0){
         gameMenu();
@@ -1155,7 +1121,7 @@ void Game::playMedium(){
     showStats();
     cout << "0 - Pause or Exit to Menu"<<endl;
     showTable();
-    cout << "Your turn, input a number between 0-9" <<endl;
+    cout << "Your turn, input a number between 1-9" <<endl;
     cin >> location_on_game_array;
     if(location_on_game_array==0){
         gameMenu();
@@ -1326,7 +1292,7 @@ char Game::checkTable(){
         return game_array[0];
     }else if(game_array[2] == game_array[4] && game_array[4] == game_array[6]){
         return game_array[2];
-    }else if(nop == 9){
+    }else if((nop == 8) || (nop==9)){
         return 'N'; //N stands for no winner
     }
     return 't';
@@ -1616,7 +1582,7 @@ void Game::readAndPrintGameArrays(const string& filename, const string& user, co
             
             // Check if this is the user and difficulty we want
             if (current_user == user && current_difficulty == difficulty) {
-                cout << "User: " << current_user << " Difficulty: " << current_difficulty << endl;
+                // cout << "User: " << current_user << " Difficulty: " << current_difficulty << endl;
                 foundUser = true;
             } else {
                 foundUser = false;
@@ -1674,7 +1640,7 @@ void Game::removeUserFromFile(const string& filename, const string& user, const 
             size_t difficulty_pos = line.find("Difficulty: ");
             current_user = line.substr(user_pos + 6, difficulty_pos - user_pos - 7);
             current_difficulty = line.substr(difficulty_pos + 12); // Adjusted substring extraction
-            cout<< user <<difficulty<<endl;
+            // cout<< user <<difficulty<<endl;
             // Check if this is the user and difficulty we want to remove
             if (current_user == user && current_difficulty == difficulty) {
                 foundUser = true;
