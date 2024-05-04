@@ -42,3 +42,11 @@ User: computer&Adebola Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0
 User: Adebola Difficulty: Elementary Victories: 0 Defeats: 0 Ties: 0 
 User: computer&Ewa Difficulty: Elementary Victories: 0 Defeats: 1 Ties: 0 
 User: Ewa Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0 
+User: Diana Difficulty: HumanVsHuman Victories: 1 Defeats: 0 Ties: 0 
+User: Jane Difficulty: HumanVsHuman Victories: 2 Defeats: 4 Ties: 0 
+User: Ayoub Difficulty: HumanVsHuman Victories: 5 Defeats: 2 Ties: 0 
+User: Janet Difficulty: HumanVsHuman Victories: 4 Defeats: 8 Ties: 0 
+User: Folake Difficulty: HumanVsHuman Victories: 3 Defeats: 1 Ties: 0  
+User: Florence Difficulty: HumanVsHuman Victories: 1 Defeats: 3 Ties: 0 
+User: Macron Difficulty: HumanVsHuman Victories: 1 Defeats: 0 Ties: 0 
+User: Narendra Difficulty: HumanVsHuman Victories: 0 Defeats: 1 Ties: 0 

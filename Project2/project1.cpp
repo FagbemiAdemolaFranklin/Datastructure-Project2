@@ -29,9 +29,9 @@ class Game{
     bool game_state;
     char game_array[9]={'\0','\0','\0','\0','\0','\0','\0','\0','\0'};
     int nop=0, location_on_game_array, starter, array_size = (sizeof(game_array)/sizeof(char)) - 1, difficulty_number; // nop means number of plays
-    char human='O', computer='X', inputed_character='\0';
-    unsigned long stats, victories=0, defeats=0, ties=0, computer_victories=0, human_victories=0, computer_defeats=0, human_defeats=0, computer_ties=0, human_ties=0;
-    string exit_confirmation, difficulty="Elementary",User;
+    char human='O', computer='X', inputed_character='\0', human2='X';
+    unsigned long stats, victories=0, defeats=0, ties=0, computer_victories=0, human_victories=0, human_victories_2=0,  computer_defeats=0, human_defeats=0, human_defeats_2=0 , computer_ties=0, human_ties=0, human_ties_2=0;
+    string exit_confirmation, difficulty="Elementary",User, Human1, Human2;
 
     public:
         Game(){
@@ -40,6 +40,7 @@ class Game{
         Game(char );
         char checkTable();
         void showTable();
+        void showTable2();
         void countTable();
         void countPlays();
         void playGame();
@@ -51,6 +52,9 @@ class Game{
         void playGreedyWinner();
         void playMedium();
         void playMediumWinner();
+        void playAdvanced();
+        void playAdvancedWinner();
+        void playHumanVsHuman();
         void execute_option(int);
         void execute_option_one(),execute_option_two();
         void execute_option_three(),execute_option_four();
@@ -59,11 +63,15 @@ class Game{
         Game startNewGame();
         int retrievePreviousGame(string user);
         int readAndWriteStats(string, string, string);
+        int readAndWriteStats2(string, string, string);
         int loadStats(string, string, string);
+        int loadStats2(string, string, string);
         void showStats();
+        void showStats2();
         void resetStats();
         void writeStats(string);
         void checkAndComputeStats();
+        void checkAndComputeStats2();
         void showMultipleTables(char [][9], int);
         void writeGameArrayToFile(const char*);
         void readAndPrintGameArrays(const string &, const string &, const string & );
@@ -71,6 +79,7 @@ class Game{
         void saveArrays(string);
         void showArrays();
         int saveGame();
+        int saveGame2();
         int showTopPlayers(string, string);
         void exit();
         
@@ -129,8 +138,6 @@ int Game::showTopPlayers(string text3_param, string diff3){
             line_object_2 = current_line.substr(diff_pos + 12, vict_pos - diff_pos - 13);
         }
         if(line_object_2 == diff3){
-            cout<< current_line.find("User: computer&");
-            cout<< "foundcomp"<<endl;
             players[get_current_player] = {line_object, stoi(current_line.substr(current_line.find("Victories: ") +11)),
                                             stoi(current_line.substr(current_line.find("Defeats: ") +9)),
                                             stoi(current_line.substr(current_line.find("Ties: ") +6))
@@ -152,6 +159,16 @@ void Game::showStats(){
     cout <<right << "Computer_Victories: " <<computer_victories<<endl;
     cout <<right << "Computer_Defeats: " <<computer_defeats<<endl;
     cout <<right << "Computer_Ties: " <<computer_ties<<endl;
+}
+
+void Game::showStats2(){
+    cout <<right << "Difficulty: " <<difficulty<<endl;
+    cout <<right << Human1 + "_Victories: " <<human_victories<<endl;
+    cout <<right << Human1 + "_Defeats: " <<human_defeats<<endl;
+    cout <<right << Human1 + "_Ties: " <<human_ties<<endl;
+    cout <<right << Human2 + "_Victories: " <<human_victories_2<<endl;
+    cout <<right << Human2 + "_Defeats: " <<human_defeats_2<<endl;
+    cout <<right << Human2 + "_Ties: " <<human_ties_2<<endl;
 }
 
 int Game::loadStats(string text2_param, string user2, string diff2){  
@@ -191,6 +208,59 @@ int Game::loadStats(string text2_param, string user2, string diff2){
                     symbol_find = current_line.find("Ties: ");
                     computer_ties = stoi(current_line.substr(symbol_find + 6));
                 } else if (user2==User) {
+                    symbol_find = current_line.find("Victories: ");
+                    human_victories = stoi(current_line.substr(symbol_find + 11));
+                    symbol_find = current_line.find("Defeats: ");
+                    human_defeats = stoi(current_line.substr(symbol_find + 9));
+                    symbol_find = current_line.find("Ties: ");
+                    human_ties = stoi(current_line.substr(symbol_find + 6));
+                }
+                // End of processing statistics logic
+                retrieveFile.close();
+                return 0; // Exit function after processing statistics
+            }
+            
+        }
+        
+    }
+
+    cout << "No data found for this user" << endl;
+    retrieveFile.close();
+    resetStats();
+    return 0;
+}
+
+int Game::loadStats2(string text2_param, string user2, string diff2){  
+    fstream retrieveFile(text2_param);
+    string current_line = "";
+
+    if (!retrieveFile.is_open()) {
+        cout << "File not found" << endl;
+        return -1;
+    }
+
+    while (getline(retrieveFile, current_line)) {
+        string line_object = "", line_object_2 = "";
+        // Check if the line contains "User:" and "Difficulty:" substrings
+        size_t user_pos = current_line.find("User: ");
+        size_t diff_pos = current_line.find("Difficulty: ");
+        size_t vict_pos = current_line.find("Victories: ");
+
+        if (user_pos != string::npos && diff_pos != string::npos) {
+            // Extract user and difficulty substrings
+            line_object = current_line.substr(user_pos + 6, diff_pos - user_pos - 7);
+            line_object_2 = current_line.substr(diff_pos + 12, vict_pos-diff_pos-13);
+            if ((line_object==user2) && (line_object_2==difficulty)) {
+                cout << "Retrieving statistics" << endl;
+                int symbol_find;
+                if (user2 == Human2) {
+                    symbol_find = current_line.find("Victories: ");
+                    human_victories_2 = stoi(current_line.substr(symbol_find + 11));
+                    symbol_find = current_line.find("Defeats: ");
+                    human_defeats_2 = stoi(current_line.substr(symbol_find + 9));
+                    symbol_find = current_line.find("Ties: ");
+                    human_ties_2 = stoi(current_line.substr(symbol_find + 6));
+                } else if (user2==Human1) {
                     symbol_find = current_line.find("Victories: ");
                     human_victories = stoi(current_line.substr(symbol_find + 11));
                     symbol_find = current_line.find("Defeats: ");
@@ -330,6 +400,106 @@ int Game::readAndWriteStats(string text_param, string user, string diff) {
     return 0;
 }
 
+
+int Game::readAndWriteStats2(string text_param, string user, string diff) {
+    fstream stats_file_read_and_write(text_param, ios::in | ios::out);
+    string current_line = "";
+    bool userExists = false; // Flag to track if the user exists in the file
+
+    if (!stats_file_read_and_write.is_open()) {
+        cout << "Error opening file" << endl;
+        return -1;
+    } else {
+        // Loop through each line in the file
+        while (getline(stats_file_read_and_write, current_line)) {
+            string line_object = "", line_object_2 = "";
+            // Check if the line contains "User:", "Difficulty:", and "Victories:" substrings
+            size_t user_pos = current_line.find("User: ");
+            size_t diff_pos = current_line.find("Difficulty: ");
+            size_t vict_pos = current_line.find("Victories: ");
+
+            if (user_pos != string::npos && diff_pos != string::npos && vict_pos != string::npos) {
+                // Extract user, difficulty, and victories substrings
+                line_object = current_line.substr(user_pos + 6, diff_pos - user_pos - 7);
+                line_object_2 = current_line.substr(diff_pos + 12, vict_pos - diff_pos - 13);
+
+                // Check if the current line corresponds to the specified user and difficulty
+                if ((line_object == user) && (line_object_2 == diff)) {
+                    cout<<line_object<<endl;
+                    cout<<line_object_2<<endl;
+                    // Update the line with new victories, defeats, and ties
+                    if(user == Human2){
+                        cout<<"True"<<endl;
+                        int new_victories = stoi(current_line.substr(vict_pos + 11)) + human_victories_2;
+                        int new_defeats = stoi(current_line.substr(current_line.find("Defeats: ") + 9)) + human_defeats_2;
+                        int new_ties = stoi(current_line.substr(current_line.find("Ties: ") + 6)) + human_ties_2;
+                        size_t line_length = current_line.length()+2; // Adding 1 for the newline character
+                        //+ 3//
+                        // Seek to the position of the line to be modified
+                        stats_file_read_and_write.seekp(stats_file_read_and_write.tellg() - static_cast<streamoff>(line_length));
+
+                        // Write the updated line
+                        stats_file_read_and_write << "User: " << user << " " << "Difficulty: " << diff << " "
+                                                << "Victories: " << human_victories_2 << " "
+                                                << "Defeats: " << human_defeats_2 << " "
+                                                << "Ties: " << human_ties_2 << " ";
+
+                        userExists = true; // Set the flag to true
+                        break; // Exit the loop since the user was found and updated
+                    }else if (user == Human1){
+                        cout<<"False"<<endl;
+                        int new_victories = stoi(current_line.substr(vict_pos + 11)) + human_victories;
+                        int new_defeats = stoi(current_line.substr(current_line.find("Defeats: ") + 9)) + human_defeats;
+                        int new_ties = stoi(current_line.substr(current_line.find("Ties: ") + 6)) + human_ties;
+                        size_t line_length = current_line.length()+2; // Adding 1 for the newline character
+                        //+ 3//
+                        // Seek to the position of the line to be modified
+                        stats_file_read_and_write.seekp(stats_file_read_and_write.tellg() - static_cast<streamoff>(line_length));
+
+                        // Write the updated line
+                        stats_file_read_and_write << "User: " << user << " " << "Difficulty: " << diff << " "
+                                                << "Victories: " << human_victories << " "
+                                                << "Defeats: " << human_defeats << " "
+                                                << "Ties: " << human_ties << " ";
+
+                        userExists = true; // Set the flag to true
+                        break; // Exit the loop since the user was found and updated
+                    }
+                    
+                }
+            }
+        }
+
+        // If the user does not exist in the file, append their data to the end of the file
+        if (!userExists) {
+            stats_file_read_and_write.close();
+            stats_file_read_and_write.open(text_param, ios::out | ios::app); // Reopen in append mode
+            if (!stats_file_read_and_write.is_open()) {
+                cout << "Error opening file for appending" << endl;
+                return -1;
+            }
+
+            if (user == Human2) {
+                stats_file_read_and_write << "User: " << user << " " << "Difficulty: " << diff << " "
+                                          << "Victories: " << human_victories_2 << " "
+                                          << "Defeats: " << human_defeats_2 << " "
+                                          << "Ties: " << human_ties_2<< " "<< endl;
+            }else{
+                stats_file_read_and_write << "User: " << user << " " << "Difficulty: " << diff << " "
+                                          << "Victories: " << human_victories << " "
+                                          << "Defeats: " << human_defeats << " "
+                                          << "Ties: " << human_ties<< " "<< endl;
+            }
+        }
+
+        stats_file_read_and_write.close(); // Close the file
+    }
+
+    cout << "Operation completed" << endl;
+    return 0;
+}
+
+
 int Game::retrievePreviousGame(string user) {
     cout << "Retrieving..." << endl;
     ifstream retriever("previous_game.txt");
@@ -375,7 +545,6 @@ int Game::retrievePreviousGame(string user) {
                         cout<<game_array[i]<<endl;
                     }
                     cout<<"Finished"<<endl; 
-                    current_line.erase();
                     userFound = true;
                 } else if (retrieve_decision == 'N') {
                     // Skip writing this line to the temporary file
@@ -408,20 +577,41 @@ int Game::retrievePreviousGame(string user) {
 }
 
 void Game::execute_option_one(){
-    if(User==""){
-        cout <<"Please enter your name"<<endl;
-        cin >>User;
-        retrievePreviousGame(User);
-        cout<<"yeah"<<endl;
-        loadStats("temporary_stats.txt", "computer&"+User, difficulty);
-        loadStats("temporary_stats.txt", User, difficulty);
-        playGame();
+
+    if (difficulty == "HumanVsHuman"){
+        if((Human1 == "") && (Human2=="")){
+            cout<<"Please enter first user's name: "<<endl;
+            cin >> Human1;
+            User=Human1;
+            cout << "Please enter second user's name: " <<endl;
+            cin >> Human2;
+            retrievePreviousGame(Human1);
+            loadStats2("temporary_stats.txt", Human1, difficulty);
+            loadStats2("temporary_stats.txt", Human2, difficulty);
+            playGame();
+        }else{
+            retrievePreviousGame(Human1);
+            loadStats2("temporary_stats.txt", Human1, difficulty);
+            loadStats2("temporary_stats.txt", Human2, difficulty);
+            playGame();
+        }
+        
     }else{
-        retrievePreviousGame(User);
-        loadStats("temporary_stats.txt", "computer&"+User, difficulty);
-        loadStats("temporary_stats.txt", User, difficulty);
-        playGame();
+        if(User==""){
+            cout <<"Please enter your name"<<endl;
+            cin >>User;
+            retrievePreviousGame(User);
+            loadStats("temporary_stats.txt", "computer&"+User, difficulty);
+            loadStats("temporary_stats.txt", User, difficulty);
+            playGame();
+        }else{
+            retrievePreviousGame(User);
+            loadStats("temporary_stats.txt", "computer&"+User, difficulty);
+            loadStats("temporary_stats.txt", User, difficulty);
+            playGame();
+        }
     }
+    
 }
 
 void Game::execute_option_two(){
@@ -433,9 +623,6 @@ void Game::execute_option_two(){
         // showTable();
         difficulty==""?difficulty="Elementary":difficulty;
         cout<< "Your symbol is O"<<endl;
-        // srand(time(0));
-        // game_array[checkRandomNumber()%9] = computer;
-        // nop++;
         gameMenu();
     }else if(starter == 1){
         difficulty==""?difficulty="Elementary":difficulty;
@@ -496,15 +683,22 @@ void Game::execute_option_three(){
             break;
     }
     cout << difficulty << " " << "selected" <<endl;
+    // restart_game();
     resetStats();
     gameMenu();
 }
 
-
 void Game::execute_option_four(){
-    saveGame();
-    gameMenu();
-    cout << "sucessfully saved"<<endl;
+    if(difficulty=="HumanVsHuman"){
+        saveGame2();
+        gameMenu();
+        cout<<"sucessfully saved"<<endl;
+    }else{
+         saveGame();
+        gameMenu();
+        cout << "sucessfully saved"<<endl;
+    }
+   
 }
 
 bool compareVictories(const PlayerStats& player1, const PlayerStats& player2) {
@@ -648,6 +842,68 @@ void Game::playMediumWinner(){
     // game_array[checkRandomNumber()] = computer;
 }
 
+void Game::playAdvancedWinner(){
+    for (int i = 0; i<=8; i++) {
+        if (game_array[i] == '\0') {
+            // If an empty cell is found, try placing the computer's symbol there
+            game_array[i] = computer;
+            // Check if this move results in a win for the computer
+            if (checkTable() == computer) return; // If so, the game is over
+            // If not, undo the move and continue searching
+            game_array[i] = '\0';
+            break;
+        }
+    }
+
+    // If the computer can't win in the next move, check if the human can win
+    for (int i = 0; i<=8; i++) {
+        if (game_array[i] == '\0') {
+            // If an empty cell is found, try placing the human's symbol there
+            game_array[i] = human;
+            // Check if this move results in a win for the human
+            if (checkTable() == human) {
+                // If so, block the human's winning move and return
+                game_array[i] = computer;
+                return;
+            }
+            // If not, undo the move and continue searching
+            game_array[i] = '\0';
+            game_array[checkRandomNumber()] = computer;
+            break;
+        }
+    }
+    // If no win was achieved with the current move, play randomly
+    // game_array[checkRandomNumber()] = computer;
+}
+
+void  Game::playAdvanced(){
+   showStats();
+    cout << "0 - Pause or Exit to Menu"<<endl;
+    showTable();
+    cout << "Your turn, input a number between 0-9" <<endl;
+    cin >> location_on_game_array;
+    if(location_on_game_array==0){
+        gameMenu();
+    }else{
+        if(location_on_game_array>9){
+            cout <<"Input a number between 1-9" <<endl;
+            playAdvanced();
+        }else if(game_array[location_on_game_array-1] != '\0'){
+            cout << "The chosen location is occupied, choose another." << endl;
+            playAdvanced();
+        }else if(location_on_game_array == 0 ){
+            gameMenu();
+        }else{
+            game_array[location_on_game_array-1] = human;
+            checkAndComputeStats();
+            playAdvancedWinner();
+            checkAndComputeStats();
+            nop+=2;
+            playAdvanced();
+        } 
+    }
+}
+
 void Game::playMedium(){
     showStats();
     cout << "0 - Pause or Exit to Menu"<<endl;
@@ -694,9 +950,9 @@ void Game::playGame() {
     }else if(difficulty == "Medium"){
         playMedium();
     }else if(difficulty == "Advanced"){
-
+        playAdvanced();
     }else if(difficulty == "HumanVsHuman"){
-
+        playHumanVsHuman();
     }else if(difficulty == "ComputerVsComputer"){
 
     }
@@ -743,6 +999,37 @@ void Game::checkAndComputeStats(){
     }
 }
 
+void Game::checkAndComputeStats2(){
+    if((checkTable() == 'X' && human2 == 'X') || (checkTable() == 'O' && human2 == 'O')){
+        cout << Human2 << "wins"<<endl;
+        human_victories_2++;
+        human_defeats++;
+        readAndWriteStats2("temporary_stats.txt", Human1, difficulty);
+        readAndWriteStats2("temporary_stats.txt", Human2, difficulty);
+        removeUserFromFile("arrays.txt", Human1, difficulty);
+        nop=0;
+        clearArray();
+    }else if((checkTable() == 'X' && human == 'X') || (checkTable() == 'O' && human == 'O')){
+        cout << Human1 << "wins"<<endl;
+        nop=0;
+        human_victories++;
+        human_defeats_2++;
+        readAndWriteStats2("temporary_stats.txt", Human1, difficulty);
+        readAndWriteStats2("temporary_stats.txt", Human2, difficulty);
+        removeUserFromFile("arrays.txt", Human1, difficulty);
+        clearArray();
+    }else if(checkTable() == 'N'){
+        cout << "It's a tie.!!"<<endl;
+        nop=0;
+        clearArray();
+        human_ties_2++;
+        human_ties++;
+        readAndWriteStats2("temporary_stats.txt", Human1, difficulty);
+        readAndWriteStats2("temporary_stats.txt", Human2, difficulty);
+        removeUserFromFile("arrays.txt", Human1, difficulty);
+    }
+}
+
 char Game::checkTable(){ 
     // statements to check the equality in the table in case there is a winner 
     if(game_array[0] == game_array[1] && game_array[1] == game_array[2]){
@@ -771,19 +1058,32 @@ void Game::showTable(){
     cout << right <<"No of plays: "<< nop << "  "<< "Difficulty :" << difficulty <<endl;
     writeGameArrayToFile("arrays.txt");
     readAndPrintGameArrays("arrays.txt", User, difficulty);
-    cout << "|" << game_array[0] << "|" <<game_array[1] << "|" <<game_array[2]<<endl;
-    cout << "-----"<<endl;
-    cout << "|" << game_array[3] << "|" <<game_array[4] << "|" <<game_array[5]<<endl;
-    cout << "------"<<endl;
-    cout << "|" << game_array[6] << "|" <<game_array[7] << "|" <<game_array[8]<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout << " "<< game_array[0] << " | " <<game_array[1] << " | " <<game_array[2]<<endl;
+    cout << "---------"<<endl;
+    cout << " "<< game_array[3] << " | " <<game_array[4] << " | " <<game_array[5]<<endl;
+    cout << "---------"<<endl;
+    cout << " "<< game_array[6] << " | " <<game_array[7] << " | " <<game_array[8]<<endl;
+}
+
+void Game::showTable2(){
+    cout << right <<"No of plays: "<< nop << "  "<< "Difficulty :" << difficulty <<endl;
+    writeGameArrayToFile("arrays.txt");
+    readAndPrintGameArrays("arrays.txt", Human1, difficulty);
+    cout<<endl;
+    cout<<endl;
+    cout << " "<< game_array[0] << " | " <<game_array[1] << " | " <<game_array[2]<<endl;
+    cout << "---------"<<endl;
+    cout << " "<< game_array[3] << " | " <<game_array[4] << " | " <<game_array[5]<<endl;
+    cout << "---------"<<endl;
+    cout << " "<< game_array[6] << " | " <<game_array[7] << " | " <<game_array[8]<<endl;
 }
 
 void Game::restart_game(){
     delete this;
-    // nop=0;
-    // for(int j = 0; j<=array_size; j++){
-    //     game_array[j] = ' ';
-    // }
+    Game *new_game = new Game;
+    new_game->gameMenu();
 }
 
 void Game::exit(){
@@ -793,14 +1093,23 @@ void Game::exit(){
         cout << "Is the game over?. Are you sure that you want to exit ? Yes or No" <<endl;
         cin >> exit_confirmation;
         if(exit_confirmation == "Yes") {
-            readAndWriteStats("temporary_stats.txt", "computer&"+User, difficulty);
-            readAndWriteStats("temporary_stats.txt", User, difficulty);
-            saveGame();
-            ::exit(0);
+            if(difficulty=="HumanVsHuman"){
+                readAndWriteStats2("temporary_stats.txt", Human1, difficulty);
+                readAndWriteStats2("temporary_stats.txt", Human2, difficulty);
+                saveGame2();
+                ::exit(0);
+            }else{
+                readAndWriteStats("temporary_stats.txt", "computer&"+User, difficulty);
+                readAndWriteStats("temporary_stats.txt", User, difficulty);
+                saveGame();
+                ::exit(0);
+            }
+            
         }else if(exit_confirmation == "No"){
             playGame();
         }else{
             cout << "Please input a valid expression" <<endl;
+            exit();
         }   
     }
     
@@ -825,8 +1134,6 @@ int Game::saveGame(){
                 // Extract user, difficulty, and victories substrings
                 line_object = current_line.substr(user_pos + 6, human_pos - user_pos - 7);
                 if ((line_object == User)) {
-                    cout<<line_object<<endl;
-                    cout<<line_object_2<<endl;
                     cout<<"Saving your game"<<endl;
                     size_t line_length = current_line.length()+2; // Adding 1 for the newline character
                     myfile.seekp(myfile.tellg() - static_cast<streamoff>(line_length));
@@ -870,6 +1177,70 @@ int Game::saveGame(){
         return 0;
     }   
 }
+
+int Game::saveGame2(){
+    fstream myfile;
+    myfile.open("previous_game.txt", ios::in | ios::out);
+    string current_line="";
+    bool userExists=false;
+    if(!myfile.is_open()){
+        cout << "Error opening backup file" <<endl;
+        return -1;
+    }else{
+        while (getline(myfile, current_line)) {
+            string line_object = "", line_object_2 = "";
+            // Check if the line contains "User:"
+            size_t user_pos = current_line.find("User: ");
+            size_t human_pos = current_line.find("human: ");
+
+            if (user_pos != string::npos && human_pos != string::npos) {
+                // Extract user, difficulty, and victories substrings
+                line_object = current_line.substr(user_pos + 6, human_pos - user_pos - 7);
+                if ((line_object == User)) {
+                    cout<<"Saving your game"<<endl;
+                    size_t line_length = current_line.length()+2; // Adding 1 for the newline character
+                    myfile.seekp(myfile.tellg() - static_cast<streamoff>(line_length));
+                    myfile <<"User: " << User<< " " << "human:  " << human<< " " 
+                        <<  "human2:  "<<human2 << " " << "nop: "<< nop << " " 
+                        <<  "location_on_game_array: "<<location_on_game_array<< " " 
+                        << "array_size: "<<array_size<< " " << "difficulty: "<<difficulty << " ";
+                    myfile << "arrays: ";
+                    for (int i = 0; i < 9; ++i) {
+                        myfile << game_array[i];
+                    }
+                    userExists = true; // Set the flag to true
+                    break; // Exit the loop since the user was found and updated
+                }
+            }
+        }
+
+        if (!userExists) {
+            myfile.close();
+            myfile.open("previous_game.txt", ios::out | ios::app); // Reopen in append mode
+            if (!myfile.is_open()) {
+                cout << "Error opening file for appending" << endl;
+                return -1;
+            }
+            cout<<"Resaving"<<endl;
+           
+            myfile <<"User: " << User<< " " << "human:  " << human<< " " 
+                <<  "human2:  "<<human2 << " " << "nop: "<< nop << " " 
+                <<  "location_on_game_array: "<<location_on_game_array<< " " 
+                << "array_size: "<<array_size<< " " << "difficulty: "<<difficulty << " ";
+                myfile << "arrays: ";
+                for (int i = 0; i < 9; ++i) {
+                    myfile << game_array[i];
+                }
+                myfile<<endl;
+            
+        }
+
+        myfile.close(); // Close the file
+        cout << "Operation completed" << endl;
+        return 0;
+    }   
+}
+
 
 void Game::writeGameArrayToFile(const char* filename) {
     ifstream infile(filename);
@@ -930,54 +1301,6 @@ void Game::writeGameArrayToFile(const char* filename) {
     }
     cout << "Game array successfully written to file: " << filename << endl;
 }
-
-// void Game::readAndPrintGameArrays(const string& filename) {
-//     ifstream infile(filename);
-//     if (!infile.is_open()) {
-//         cout << "Error opening file for reading." << endl;
-//         return;
-//     }
-
-//     string line;
-//     string user, difficulty;
-//     bool readingGameArrays = false;
-//     vector<string> gameArrays;
-
-//     while (getline(infile, line)) {
-//         if (line.find("User: ") != string::npos && line.find("Difficulty: ") != string::npos) {
-//             // Extract user and difficulty from the line
-//             size_t user_pos = line.find("User: ");
-//             size_t difficulty_pos = line.find("Difficulty: ");
-//             user = line.substr(user_pos + 6, difficulty_pos - user_pos - 6);
-//             difficulty = line.substr(difficulty_pos + 13);
-//             cout << "User: " << user << " Difficulty: " << difficulty << endl;
-//             readingGameArrays = true;
-//         } else if (readingGameArrays && line.find("Game Array") != string::npos) {
-//             // Extract and store the game array
-//             size_t array_pos = line.find(":") + 2; // Move past the colon and space
-//             string gameArrayStr = line.substr(array_pos);
-//             gameArrays.push_back(gameArrayStr);
-//         }
-//     }
-
-//     // Print the game arrays side by side
-//     int numArrays = gameArrays.size();
-//     int numRows = 3; // Assuming Tic Tac Toe board is 3x3
-//     for (int i = 0; i < numRows; ++i) {
-//         for (int j = 0; j < numArrays; ++j) {
-//             string currentArray = gameArrays[j];
-//             // Print each cell of the current array
-//             for (int k = 0; k < 3; ++k) {
-//                 cout << "| " << currentArray[i * 3 + k] << " ";
-//             }
-//             cout << "..... ";
-
-//         }
-//         cout << endl;
-//     }
-
-//     infile.close();
-// }
 
 
 void Game::readAndPrintGameArrays(const string& filename, const string& user, const string& difficulty) {
@@ -1096,6 +1419,53 @@ void Game::removeUserFromFile(const string& filename, const string& user, const 
     } else {
         cout << "User " << user << " with difficulty " << difficulty << " not found in file." << endl;
     }
+}
+
+
+void Game::playHumanVsHuman(){
+    showStats2();
+    cout << "0 - Pause or Exit to Menu"<<endl;
+    showTable2();
+    cout << Human1<< ": " << human << endl;
+    cin >> location_on_game_array;
+    if(location_on_game_array == 0){
+        gameMenu();
+    }else{
+        if(location_on_game_array>9){
+            cout <<"Input a number between 1-9" <<endl;
+            playHumanVsHuman();
+        }else if(game_array[location_on_game_array-1] != '\0'){
+            cout << "The chosen location is occupied, choose another." << endl;
+            playHumanVsHuman();
+        }else{
+            game_array[location_on_game_array-1] = human;
+            checkAndComputeStats2();
+            nop+=1;
+        }
+    }
+
+    showStats2();
+    cout << "0 - Pause or Exit to Menu"<<endl;
+    showTable2();
+    cout << Human2 << ": " << human2 <<endl;
+    cin >> location_on_game_array;
+    if(location_on_game_array == 0){
+        gameMenu();
+    }else{
+        if(location_on_game_array>9){
+            cout <<"Input a number between 1-9" <<endl;
+            playHumanVsHuman();
+        }else if(game_array[location_on_game_array-1] != '\0'){
+            cout << "The chosen location is occupied, choose another." << endl;
+            playHumanVsHuman();
+        }else{
+            game_array[location_on_game_array-1] = human2;
+            checkAndComputeStats2();
+            nop+=1;
+            playHumanVsHuman();
+        }
+    }
+
 }
 
 
