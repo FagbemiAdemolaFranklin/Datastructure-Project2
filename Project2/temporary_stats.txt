@@ -84,3 +84,14 @@ User: computer&Sam Difficulty: Elementary Victories: 2 Defeats: 6 Ties: 1
 User: Sam Difficulty: Elementary Victories: 6 Defeats: 2 Ties: 1 
 User: computer&Ola Difficulty: Advanced Victories: 3 Defeats: 0 Ties: 0 
 User: Ola Difficulty: Advanced Victories: 0 Defeats: 3 Ties: 0 
+User: computer&Keziah Difficulty: Elementary Victories: 0 Defeats: 1 Ties: 0 
+User: Keziah Difficulty: Elementary Victories: 1 Defeats: 0 Ties: 0 
+User: Kehinde Difficulty: HumanVsHuman Victories: 1 Defeats: 0 Ties: 0 
+User: computer&Stephen Difficulty: Basic Victories: 1 Defeats: 0 Ties: 0 
+User: Stephen Difficulty: Basic Victories: 0 Defeats: 1 Ties: 0 
+UUser: Hamsel Difficulty: HumanVsHuman Victories: 1 Defeats: 1 Ties: 0 
+User: Lordin Difficulty: HumanVsHuman Victories: 1 Defeats: 1 Ties: 0 
+User: computer&Nufiat Difficulty: Advanced Victories: 1 Defeats: 0 Ties: 0 
+User: Nufiat Difficulty: Advanced Victories: 0 Defeats: 1 Ties: 0 
+User: computer&Freddy Difficulty: Basic Victories: 1 Defeats: 0 Ties: 0 
+User: Freddy Difficulty: Basic Victories: 0 Defeats: 1 Ties: 0 
